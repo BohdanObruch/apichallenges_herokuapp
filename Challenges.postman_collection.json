@@ -1,0 +1,3293 @@
+{
+	"info": {
+		"_postman_id": "611cb0b3-90df-409f-9d8c-3feeaf69e5c2",
+		"name": "Challenges",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19234673"
+	},
+	"item": [
+		{
+			"name": "#1 POST Challenger",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Отримуємо значення заголовка X-Challenger з відповіді\r",
+							"const xChallengerValue = pm.response.headers.get('X-Challenger');\r",
+							"\r",
+							"// Перевіряємо, чи значення існує\r",
+							"if (xChallengerValue) {\r",
+							"    // Зберігаємо значення в змінну оточення\r",
+							"    pm.environment.set('X-Challenger', xChallengerValue);\r",
+							"    console.log('X-Challenger value saved to environment:', xChallengerValue);\r",
+							"} else {\r",
+							"    console.warn('X-Challenger header not found in the response.');\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/challenger",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenger"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#2 GET /challenges (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/challenges",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenges"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#3 GET /todos (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"var ids = jsonData.todos.map(function (elem) {\r",
+							"    return elem.id;\r",
+							"})\r",
+							"postman.setEnvironmentVariable(\"id\", ids[0]);\r",
+							"postman.setEnvironmentVariable(\"ids\", ids);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#4 GET /todo (404) not plural",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todo",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#5 GET /todos/{id} (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#6 GET /todos/{id} (404)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"ids_array = pm.environment.get(\"ids\").split(\",\")\r",
+							"var random_num = Math.floor(Math.random() * 1000);\r",
+							"while (ids_array.indexOf(random_num) != -1) {\r",
+							"    random_num = Math.floor(Math.random() * 1000);\r",
+							"}\r",
+							"postman.setEnvironmentVariable(\"invalid_id\", random_num); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todos/{{invalid_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#9 POST /todos (201)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#7 GET /todos (200) ?filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todos?doneStatus=true",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					],
+					"query": [
+						{
+							"key": "doneStatus",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#8 HEAD /todos (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "HEAD",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#10 POST /todos (400) doneStatus",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies\",\r\n  \"doneStatus\": done,\r\n  \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#11 POST /todos (400) title too long",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#12 POST /todos (400) description too long",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \" eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#13 POST /todos (201) max out content",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies eat cookies eat cookies eat cookies ea\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat coo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#14 POST /todos (413) content too long",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 413\", function () {\r",
+							"    pm.response.to.have.status(413);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies eat cookies eat cookies eat cookies ea\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies  eat cookies eat cookies eat cookies eat cookies eat cookies eat cookies eat cookie\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#15 POST /todos (400) extra",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"cookies description\",\r\n  \"new_data\": \"new\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#16 PUT /todos/{id} (400)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let currentId = parseInt(pm.variables.get('id'), 10);\r",
+							"\r",
+							"let newId = currentId + 20;\r",
+							"\r",
+							"pm.variables.set('id', newId);\r",
+							"\r",
+							"console.log('New id value:', newId);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"cookies description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#17 POST /todos/{id} (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"new eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"new cookies description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#18 \tPOST /todos/{id} (404)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let currentId = parseInt(pm.variables.get('id'), 10);\r",
+							"\r",
+							"let newId = currentId + 200;\r",
+							"\r",
+							"pm.variables.set('id', newId);\r",
+							"\r",
+							"console.log('New id value:', newId);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"new eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"new cookies description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#19 PUT /todos/{id} full (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"new title cookies\",\r\n  \"doneStatus\": false,\r\n  \"description\": \"new description cookies \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#20 PUT /todos/{id} partial (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"new title cookies\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#21 PUT /todos/{id} no title (400)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"doneStatus\": false,\r\n  \"description\": \"new description cookies \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#22 PUT /todos/{id} no amend id (400)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{id+1}},\r\n  \"title\": \"new title cookies\",\r\n  \"doneStatus\": false,\r\n  \"description\": \"new description cookies \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#23 DELETE /todos/{id} (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#24 OPTIONS /todos (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#25 GET /todos (200) XML",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/xml\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/xml');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#26 GET /todos (200) JSON",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#27 GET /todos (200) ANY",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#28 GET /todos (200) XML pref",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/xml\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/xml');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml, application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#29 GET /todos (200) no accept",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"var ids = jsonData.todos.map(function (elem) {\r",
+							"    return elem.id;\r",
+							"})\r",
+							"postman.setEnvironmentVariable(\"id\", ids[0]);\r",
+							"postman.setEnvironmentVariable(\"ids\", ids);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#30 GET /todos (406)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 406\", function () {\r",
+							"    pm.response.to.have.status(406);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/gzip",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#31 POST /todos XML",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/xml\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/xml');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<todo>\r\n  <doneStatus>true</doneStatus>\r\n  <description></description>\r\n  <title>chill 'n flex</title>\r\n</todo>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#32 POST /todos JSON",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"back to work\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#33 POST /todos (415)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 415\", function () {\r",
+							"    pm.response.to.have.status(415);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "audio/basic",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": ""
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#34 GET /challenger/guid (existing X-CHALLENGER)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"pm.environment.set(\"challenger_data\", JSON.stringify(response));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const guidValue = pm.environment.get('X-Challenger');\r",
+							"\r",
+							"if (guidValue) {\r",
+							"    pm.environment.set('guid', guidValue);\r",
+							"    console.log('guid value saved to environment:', guidValue);\r",
+							"} else {\r",
+							"    console.warn('guid header not found in the response.');\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": ""
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/challenger/{{guid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenger",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#35 PUT /challenger/guid RESTORE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const guidValue = pm.environment.get('X-Challenger');\r",
+							"\r",
+							"if (guidValue) {\r",
+							"    pm.environment.set('guid', guidValue);\r",
+							"    console.log('guid value saved to environment:', guidValue);\r",
+							"} else {\r",
+							"    console.warn('guid header not found in the response.');\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{challenger_data}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/challenger/{{guid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenger",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#36 PUT /challenger/guid CREATE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const guidValue = pm.environment.get('X-Challenger');\r",
+							"\r",
+							"if (guidValue) {\r",
+							"    pm.environment.set('guid', guidValue);\r",
+							"    console.log('guid value saved to environment:', guidValue);\r",
+							"} else {\r",
+							"    console.warn('guid header not found in the response.');\r",
+							"}\r",
+							"\r",
+							"var challengerData = pm.variables.get(\"challenger_data\");\r",
+							"var data = JSON.parse(challengerData);\r",
+							"\r",
+							"// Function to change all false values to true\r",
+							"function changeFalseToTrue(obj) {\r",
+							"    for (var key in obj) {\r",
+							"        if (typeof obj[key] === 'object' && obj[key] !== null) {\r",
+							"            changeFalseToTrue(obj[key]);\r",
+							"        } else if (obj[key] === false) {\r",
+							"            obj[key] = true;\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"// Change all false values to true in challengeStatus\r",
+							"changeFalseToTrue(data.challengeStatus);\r",
+							"\r",
+							"// Set the modified data back to the environment variable\r",
+							"pm.variables.set(\"challenger_data\", JSON.stringify(data));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{challenger_data}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/challenger/{{guid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenger",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#37 GET /challenger/database/guid (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"pm.environment.set(\"database\", JSON.stringify(response));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const guidValue = pm.environment.get('X-Challenger');\r",
+							"\r",
+							"if (guidValue) {\r",
+							"    pm.environment.set('guid', guidValue);\r",
+							"    console.log('guid value saved to environment:', guidValue);\r",
+							"} else {\r",
+							"    console.warn('guid header not found in the response.');\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/challenger/database/{{guid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenger",
+						"database",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#38 PUT /challenger/database/guid (Update)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const guidValue = pm.environment.get('X-Challenger');\r",
+							"\r",
+							"if (guidValue) {\r",
+							"    pm.environment.set('guid', guidValue);\r",
+							"    console.log('guid value saved to environment:', guidValue);\r",
+							"} else {\r",
+							"    console.warn('guid header not found in the response.');\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{database}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/challenger/database/{{guid}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"challenger",
+						"database",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#39 POST /todos XML to JSON",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<todo>\r\n  <doneStatus>false</doneStatus>\r\n  <description></description>\r\n  <title>test combinations</title>\r\n</todo>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#40 POST /todos JSON to XML",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/xml\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/xml');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"security call\",\r\n  \"doneStatus\": false,\r\n  \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "№41 DELETE /heartbeat (405)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "№42 PATCH /heartbeat (500)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#43 TRACE /heartbeat (501)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 501\", function () {\r",
+							"    pm.response.to.have.status(501);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "TRACE",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#44 GET /heartbeat (204)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#45 POST /heartbeat as DELETE (405)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "DELETE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "№46 POST /heartbeat as PATCH (500)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "PATCH",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#47 POST /heartbeat as Trace (501)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 501\", function () {\r",
+							"    pm.response.to.have.status(501);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "X-HTTP-Method-Override",
+						"value": "TRACE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/heartbeat",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"heartbeat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#48 POST /secret/token (401)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "not_password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "notadmin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/token",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#49 POST /secret/token (201)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const xAuthValue = pm.response.headers.get('X-Auth-Token');\r",
+							"\r",
+							"if (xAuthValue) {\r",
+							"    pm.environment.set('X-Auth-Token', xAuthValue);\r",
+							"    console.log('X-Auth-Token value saved to environment:', xAuthValue);\r",
+							"} else {\r",
+							"    console.warn('X-Auth-Token header not found in the response.');\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/token",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#50 GET /secret/note (403)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "invalid_token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#51 GET /secret/note (401)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#52 GET /secret/note (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response body contains the note\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.note).to.be.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "{{X-Auth-Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#53 POST /secret/note (200)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response body contains the note\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.note).to.equal(\"custom note\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "{{X-Auth-Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"note\": \"custom note\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#54 POST /secret/note (401)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"note\": \"custom note\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#55 POST /secret/note (403)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {\r",
+							"    pm.response.to.have.status(403);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "invalid_token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"note\": \"custom note\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#56 GET /secret/note (Bearer)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response body contains the note\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.note).to.be.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{X-Auth-Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#57 POST /secret/note (Bearer)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Note is less or equal 100 characters\", function () {\r",
+							"    var jsonData = pm.response.json().note;\r",
+							"    pm.expect(jsonData.length<=100);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{X-Auth-Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					},
+					{
+						"key": "X-Auth-Token",
+						"value": "{{X-Auth-Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"note\":\"my note\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/secret/note",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"secret",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#58 DELETE /todos/{id} (200) all (видалити всі дані взагалі)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var ids_to_delete_str = pm.environment.get(\"ids_to_delete\");\r",
+							"var ids_to_delete = JSON.parse(ids_to_delete_str);\r",
+							"\r",
+							"if (ids_to_delete.length > 0) {\r",
+							"    postman.setNextRequest(request.name);\r",
+							"} else {\r",
+							"    postman.setNextRequest(null);\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var ids_to_delete_str = pm.environment.get(\"ids_to_delete\");\r",
+							"var ids_to_delete;\r",
+							"\r",
+							"if (ids_to_delete_str && ids_to_delete_str.length > 0) {\r",
+							"    ids_to_delete = JSON.parse(ids_to_delete_str);\r",
+							"}\r",
+							"\r",
+							"if (!ids_to_delete || ids_to_delete.length == 0) {\r",
+							"    ids_to_delete = pm.environment.get(\"ids\").split(\",\");\r",
+							"}\r",
+							"\r",
+							"console.log(ids_to_delete);\r",
+							"\r",
+							"if (ids_to_delete.length > 0) {\r",
+							"    let current_id = ids_to_delete.shift();\r",
+							"    console.log(current_id);\r",
+							"    pm.environment.set(\"current_id\", current_id);\r",
+							"    pm.environment.set(\"ids_to_delete\", JSON.stringify(ids_to_delete));\r",
+							"} else {\r",
+							"    postman.setNextRequest(null);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos/{{current_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos",
+						"{{current_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "#59 POST /todos (201) all (repeat)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"let iterationCount = parseInt(pm.environment.get(\"iterationCount\"), 10);\r",
+							"\r",
+							"iterationCount += 1;\r",
+							"pm.environment.set(\"iterationCount\", iterationCount);\r",
+							"\r",
+							"if (iterationCount < 10) {\r",
+							"    postman.setNextRequest(request.name); \r",
+							"} else {\r",
+							"    postman.setNextRequest(null); \r",
+							"    pm.environment.unset(\"iterationCount\"); \r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (!pm.environment.get(\"iterationCount\")) {\r",
+							"    pm.environment.set(\"iterationCount\", 0);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Challenger",
+						"value": "{{X-Challenger}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"eat cookies\",\r\n  \"doneStatus\": true,\r\n  \"description\": \"\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/todos",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"todos"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
